@@ -2,7 +2,7 @@ name: media_collection_previewer
 description: A media collection previewer widget.
 version: 0.0.1
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-homepage:
+homepage: ''
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -19,6 +19,11 @@ dependencies:
       ref: main
   video_player: ^2.7.0
   collection: ^1.17.1
+  just_audio: ^0.9.34
+  audio_session: ^0.1.16
+  rxdart: ^0.27.7
+  syncfusion_flutter_sliders: ^22.1.36
+  syncfusion_flutter_core: ^22.1.36
 
 dev_dependencies:
   flutter_test:
