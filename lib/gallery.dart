@@ -84,7 +84,7 @@ class _GalleryState extends State<Gallery> {
           imageUrl:
               widget.medias[_currentIndex].url.replaceFirst('small', 'large'),
           height: height,
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
         ),
       );
     }
