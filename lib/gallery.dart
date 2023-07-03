@@ -97,11 +97,7 @@ class _GalleryState extends State<Gallery> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: content,
           ),
-          Positioned(
-            bottom: 0,
-            top: 0,
-            left: 0,
-            right: 0,
+          Positioned.fill(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
@@ -189,13 +185,11 @@ class _GalleryState extends State<Gallery> {
       child: Stack(
         children: [
           Center(
-            child: isImage
-                ? child
-                : SizedBox(
-                    height: height,
-                    width: width,
-                    child: child,
-                  ),
+            child: SizedBox(
+              height: height,
+              width: width,
+              child: child,
+            ),
           ),
           Positioned(
             top: 20,
