@@ -77,7 +77,7 @@ class MediaCollection extends StatelessWidget {
                   child: ClipOval(
                     child: ShaderMask(
                       shaderCallback: (rect) => LinearGradient(
-                          colors: [Colors.black45.withOpacity(0.9)],
+                          colors: [Colors.white.withOpacity(0.9)],
                           stops: const [0.0]).createShader(rect),
                       blendMode: BlendMode.srcOut,
                       child: Container(

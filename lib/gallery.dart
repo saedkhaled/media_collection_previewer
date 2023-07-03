@@ -167,7 +167,7 @@ class _GalleryState extends State<Gallery> {
                         ),
                         child: const Icon(
                           Icons.chevron_right,
-                          color: Color(0xFF272829),
+                          color: Color(0xFFFFFFFF),
                           size: 30,
                         ),
                       ),
