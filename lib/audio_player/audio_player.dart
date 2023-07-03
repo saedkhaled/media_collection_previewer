@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'dart:async';
+import 'dart:math';
 import 'package:audio_session/audio_session.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rx;
-import '../models/models.dart';
-import 'utils.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'utils.dart';
 
 part 'control_buttons.dart';
+part 'position_data.dart';
 part 'seek_bar.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -79,12 +79,12 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
 
   /// Collects the data useful for displaying in a seek bar, using a handy
   /// feature of rx_dart to combine the 3 streams of interest into one.
-  Stream<PositionData> get _positionDataStream =>
-      rx.Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+  Stream<_PositionData> get _positionDataStream =>
+      rx.Rx.combineLatest3<Duration, Duration, Duration?, _PositionData>(
           _player.positionStream,
           _player.bufferedPositionStream,
           _player.durationStream,
-          (position, bufferedPosition, duration) => PositionData(
+          (position, bufferedPosition, duration) => _PositionData(
               position, bufferedPosition, duration ?? Duration.zero));
 
   @override
@@ -129,7 +129,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
                 child: _ControlButtons(_player),
               ),
               Expanded(
-                child: StreamBuilder<PositionData>(
+                child: StreamBuilder<_PositionData>(
                   stream: _positionDataStream,
                   builder: (context, snapshot) {
                     final positionData = snapshot.data;
