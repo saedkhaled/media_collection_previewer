@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:media_collection_previewer/models/enums.dart';
+import 'package:media_collection_previewer/enums.dart';
 import 'package:video_player/video_player.dart';
-
 import 'gallery.dart';
-import 'models/Media.dart';
+import 'models/models.dart';
 
 class MediaCollection extends StatelessWidget {
   final List<Media> medias;

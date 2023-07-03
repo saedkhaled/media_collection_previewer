@@ -1,21 +1,16 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
+part of 'audio_player.dart';
 
 /// Displays the play/pause button and volume/speed sliders.
-class ControlButtons extends StatefulWidget {
+class _ControlButtons extends StatefulWidget {
   final AudioPlayer player;
 
-  const ControlButtons(this.player, {Key? key}) : super(key: key);
+  const _ControlButtons(this.player, {Key? key}) : super(key: key);
 
   @override
-  State<ControlButtons> createState() => _ControlButtonsState();
+  State<_ControlButtons> createState() => _ControlButtonsState();
 }
 
-class _ControlButtonsState extends State<ControlButtons> {
+class _ControlButtonsState extends State<_ControlButtons> {
   var _showVolume = false;
 
   @override

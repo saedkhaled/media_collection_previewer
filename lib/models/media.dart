@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:media_collection_previewer/models/enums.dart';
+import '../enums.dart';
 
 class Media extends Equatable {
   final int id;

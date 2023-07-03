@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:async';
 import 'package:audio_session/audio_session.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,10 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rx;
-import '../models/position_data.dart';
-import 'control_buttons.dart';
-import 'seek_bar.dart';
+import '../models/models.dart';
 import 'utils.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+
+part 'control_buttons.dart';
+part 'seek_bar.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String url;
@@ -122,14 +126,14 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: ControlButtons(_player),
+                child: _ControlButtons(_player),
               ),
               Expanded(
                 child: StreamBuilder<PositionData>(
                   stream: _positionDataStream,
                   builder: (context, snapshot) {
                     final positionData = snapshot.data;
-                    return SeekBar(
+                    return _SeekBar(
                       duration: positionData?.duration ?? Duration.zero,
                       position: positionData?.position ?? Duration.zero,
                       bufferedPosition:

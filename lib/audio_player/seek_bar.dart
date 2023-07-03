@@ -1,17 +1,13 @@
-import 'dart:math';
+part of 'audio_player.dart';
 
-import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-
-class SeekBar extends StatefulWidget {
+class _SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
   final Duration bufferedPosition;
   final ValueChanged<Duration>? onChanged;
   final ValueChanged<Duration>? onChangeEnd;
 
-  const SeekBar({
+  const _SeekBar({
     Key? key,
     required this.duration,
     required this.position,
@@ -21,10 +17,10 @@ class SeekBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  SeekBarState createState() => SeekBarState();
+  _SeekBarState createState() => _SeekBarState();
 }
 
-class SeekBarState extends State<SeekBar> {
+class _SeekBarState extends State<_SeekBar> {
   double? _dragValue;
 
   @override

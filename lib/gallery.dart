@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:media_collection_previewer/models/enums.dart';
+import 'package:media_collection_previewer/enums.dart';
 import 'package:video_player/video_player.dart';
 import 'package:web_video_player/player.dart';
-
 import 'audio_player/audio_player.dart';
-import 'models/Media.dart';
+import 'models/models.dart';
 
 class Gallery extends StatefulWidget {
   final int index;
