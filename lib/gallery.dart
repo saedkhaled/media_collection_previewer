@@ -97,7 +97,11 @@ class _GalleryState extends State<Gallery> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: content,
           ),
-          Positioned.fill(
+          Positioned(
+            bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
