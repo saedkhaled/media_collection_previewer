@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/enums.dart';
 import 'package:video_player/video_player.dart';
+
 import 'gallery.dart';
 import 'models/models.dart';
 
@@ -209,7 +210,8 @@ class MediaCollection extends StatelessWidget {
                   );
                 }
               },
-              child: child),
+              child: child,
+            ),
     );
   }
 }
