@@ -36,7 +36,7 @@ class _GalleryState extends State<Gallery> {
   @override
   Widget build(BuildContext context) {
     late Widget content;
-    var isImage = false;
+    // var isImage = false;
     var height = 400.0;
     var width = 500.0;
     if (widget.medias[_currentIndex].url.endsWith(".mp4") ||
@@ -73,7 +73,7 @@ class _GalleryState extends State<Gallery> {
       );
     } else {
       //replace small image url with large image url
-      isImage = true;
+      // isImage = true;
       // width =
       //     MediaQuery.sizeOf(context).width - (context.isPhone ? 20 : 200);
       height = MediaQuery.sizeOf(context).height - 50;
@@ -84,7 +84,7 @@ class _GalleryState extends State<Gallery> {
           imageUrl:
               widget.medias[_currentIndex].url.replaceFirst('small', 'large'),
           height: height,
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
         ),
       );
     }
