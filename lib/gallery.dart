@@ -3,19 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/enums.dart';
 import 'package:video_player/video_player.dart';
 import 'package:web_video_player/player.dart';
+
 import 'audio_player/audio_player.dart';
+import 'consts.dart';
 import 'models/models.dart';
 
 class Gallery extends StatefulWidget {
   final int index;
   final List<Media> medias;
   final VideoPlayerController? videoController;
+  final Color arrowColor;
+  final Color arrowBgColor;
 
   const Gallery({
     Key? key,
     required this.index,
     required this.medias,
     this.videoController,
+    this.arrowColor = defaultIconColor,
+    this.arrowBgColor = defaultIconBgColor,
   }) : super(key: key);
 
   @override
@@ -127,13 +133,13 @@ class _GalleryState extends State<Gallery> {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF272829),
+                        decoration: BoxDecoration(
+                          color: widget.arrowBgColor,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.chevron_left,
-                          color: Color(0xFFFFFFFF),
+                          color: widget.arrowColor,
                           size: 30,
                         ),
                       ),
@@ -162,13 +168,13 @@ class _GalleryState extends State<Gallery> {
                       child: Container(
                         width: 50,
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF272829),
+                        decoration: BoxDecoration(
+                          color: widget.arrowBgColor,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.chevron_right,
-                          color: Color(0xFFFFFFFF),
+                          color: widget.arrowColor,
                           size: 30,
                         ),
                       ),

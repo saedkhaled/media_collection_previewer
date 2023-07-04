@@ -4,15 +4,58 @@ import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/enums.dart';
 import 'package:video_player/video_player.dart';
 
+import 'consts.dart';
 import 'gallery.dart';
 import 'models/models.dart';
 
+/// A widget that displays a collection of media.
 class MediaCollection extends StatelessWidget {
+  /// The list of media to display.
   final List<Media> medias;
+
+  /// The color of the arrow icon.
+  final Color arrowColor;
+
+  /// The color of the arrow icon background.
+  final Color arrowBgColor;
+
+  /// The color of the play icon background.
+  final Color playIconBgColor;
+
+  /// The color of the audio icon background.
+  final Color audioIconBgColor;
+
+  /// The color of the audio icon.
+  final Color audioIconColor;
+
+  /// The color of the audio player background.
+  final Color audioPlayerBgColor;
+
+  /// The size of the play icon.
+  final double playIconSize;
+
+  /// The size of the audio icon.
+  final double audioIconSize;
+
+  /// The size of the play icon background.
+  final double playIconBgSize;
+
+  /// The size of the audio icon background.
+  final double audioIconBgSize;
 
   const MediaCollection({
     Key? key,
     required this.medias,
+    this.arrowColor = defaultIconColor,
+    this.arrowBgColor = defaultIconBgColor,
+    this.playIconBgColor = defaultIconColor,
+    this.audioIconBgColor = defaultIconColor,
+    this.audioIconColor = defaultIconBgColor,
+    this.audioPlayerBgColor = defaultIconBgColor,
+    this.playIconSize = defaultIconSize,
+    this.audioIconSize = defaultIconSize,
+    this.playIconBgSize = defaultIconBgSize,
+    this.audioIconBgSize = defaultIconBgSize,
   }) : super(key: key);
 
   @override
@@ -78,14 +121,14 @@ class MediaCollection extends StatelessWidget {
                   child: ClipOval(
                     child: ShaderMask(
                       shaderCallback: (rect) => LinearGradient(
-                          colors: [Colors.white.withOpacity(0.9)],
+                          colors: [playIconBgColor.withOpacity(0.9)],
                           stops: const [0.0]).createShader(rect),
                       blendMode: BlendMode.srcOut,
                       child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: const Icon(
+                        padding: EdgeInsets.all((playIconBgSize - playIconSize) / 2),
+                        child: Icon(
                           Icons.play_arrow,
-                          size: 40,
+                          size: playIconSize,
                         ),
                       ),
                     ),
@@ -100,19 +143,19 @@ class MediaCollection extends StatelessWidget {
             ? Container(
                 height: height,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: audioPlayerBgColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Center(
                   child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                        color: Colors.white, shape: BoxShape.circle),
-                    child: const Icon(
+                    height: audioIconBgSize,
+                    width: audioIconBgSize,
+                    decoration: BoxDecoration(
+                        color: audioIconBgColor, shape: BoxShape.circle),
+                    child: Icon(
                       Icons.music_note,
-                      color: Colors.black,
-                      size: 35,
+                      color: audioIconColor,
+                      size: audioIconSize,
                     ),
                   ),
                 ),
@@ -130,27 +173,7 @@ class MediaCollection extends StatelessWidget {
       padding: const EdgeInsets.all(2.5),
       child: isLast
           ? InkWell(
-              onTap: () async {
-                VideoPlayerController? videoController0;
-                if (media.url.endsWith(".mp4") ||
-                    media.url.endsWith(".MOV") ||
-                    media.type == MediaType.video) {
-                  Uri uri = Uri.parse(media.url);
-                  videoController0 = VideoPlayerController.networkUrl(uri);
-                  await videoController0.initialize();
-                }
-                if (context.mounted) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) => Gallery(
-                      index: index,
-                      medias: medias,
-                      videoController: videoController0,
-                    ),
-                  );
-                }
-              },
+              onTap: () => _showGallery(context, index, medias),
               child: Stack(
                 children: [
                   child,
@@ -189,29 +212,34 @@ class MediaCollection extends StatelessWidget {
               ),
             )
           : InkWell(
-              onTap: () async {
-                VideoPlayerController? videoController;
-                if (media.url.endsWith(".mp4") ||
-                    media.url.endsWith(".MOV") ||
-                    media.type == MediaType.video) {
-                  Uri uri = Uri.parse(media.url);
-                  videoController = VideoPlayerController.networkUrl(uri);
-                  await videoController.initialize();
-                }
-                if (context.mounted) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) => Gallery(
-                      index: index,
-                      medias: medias,
-                      videoController: videoController,
-                    ),
-                  );
-                }
-              },
+              onTap: () => _showGallery(context, index, medias),
               child: child,
             ),
     );
   }
+
+  _showGallery(BuildContext context, int index, List<Media> medias) async {
+    VideoPlayerController? videoController;
+    if (medias[index].url.endsWith(".mp4") ||
+        medias[index].url.endsWith(".MOV") ||
+        medias[index].type == MediaType.video) {
+      Uri uri = Uri.parse(medias[index].url);
+      videoController = VideoPlayerController.networkUrl(uri);
+      await videoController.initialize();
+    }
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => Gallery(
+          index: index,
+          medias: medias,
+          videoController: videoController,
+          arrowColor: arrowColor,
+          arrowBgColor: arrowBgColor,
+        ),
+      );
+    }
+  }
+
 }
