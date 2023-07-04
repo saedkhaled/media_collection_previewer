@@ -77,6 +77,7 @@ class _GalleryState extends State<Gallery> {
       // width =
       //     MediaQuery.sizeOf(context).width - (context.isPhone ? 20 : 200);
       height = MediaQuery.sizeOf(context).height - 50;
+      width = MediaQuery.sizeOf(context).width - 50;
       content = InteractiveViewer(
         child: CachedNetworkImage(
           placeholder: (_, s) => const Placeholder(),
@@ -84,7 +85,7 @@ class _GalleryState extends State<Gallery> {
           imageUrl:
               widget.medias[_currentIndex].url.replaceFirst('small', 'large'),
           height: height,
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.contain,
         ),
       );
     }
