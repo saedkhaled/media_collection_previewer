@@ -1,17 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:media_collection_previewer/enums.dart';
+import 'package:media_collection_previewer/audio_player/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:web_video_player/player.dart';
-
 import 'audio_player/audio_player.dart';
 import 'consts.dart';
 import 'models/models.dart';
+import 'widgets/arrows_bar.dart';
 
 class Gallery extends StatefulWidget {
   final int index;
   final List<Media> medias;
-  final VideoPlayerController? videoController;
   final Color arrowColor;
   final Color arrowBgColor;
 
@@ -19,7 +18,6 @@ class Gallery extends StatefulWidget {
     Key? key,
     required this.index,
     required this.medias,
-    this.videoController,
     this.arrowColor = defaultIconColor,
     this.arrowBgColor = defaultIconBgColor,
   }) : super(key: key);
@@ -30,12 +28,19 @@ class Gallery extends StatefulWidget {
 
 class _GalleryState extends State<Gallery> {
   var _currentIndex = 0;
-  late VideoPlayerController? _videoController;
+  VideoPlayerController? _videoController;
 
   @override
   void initState() {
-    _videoController = widget.videoController;
     _currentIndex = widget.index;
+    if (widget.medias[_currentIndex].isVideo) {
+      _videoController = isNotEmpty(widget.medias[_currentIndex].url)
+          ? VideoPlayerController.networkUrl(Uri.parse(widget.medias[_currentIndex].url!))
+          : VideoPlayerController.asset(widget.medias[_currentIndex].path!);
+    }
+    _videoController?.initialize().then((_) {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -45,9 +50,7 @@ class _GalleryState extends State<Gallery> {
     // var isImage = false;
     var height = 400.0;
     var width = 500.0;
-    if (widget.medias[_currentIndex].url.endsWith(".mp4") ||
-        widget.medias[_currentIndex].url.endsWith(".MOV") ||
-        widget.medias[_currentIndex].type == MediaType.video) {
+    if (widget.medias[_currentIndex].isVideo) {
       height = MediaQuery.sizeOf(context).width < 650
           ? ((MediaQuery.sizeOf(context).width *
                   _videoController!.value.size.height) /
@@ -56,14 +59,14 @@ class _GalleryState extends State<Gallery> {
       width = MediaQuery.sizeOf(context).width < 650
           ? MediaQuery.sizeOf(context).width
           : _videoController!.value.size.width / 1.7;
-      content = WebVideoPlayer(
-        videoController: _videoController!,
-        url: widget.medias[_currentIndex].url,
-        mediaId: widget.medias[_currentIndex].id,
-      );
-    } else if (widget.medias[_currentIndex].url.endsWith(".mp3") ||
-        widget.medias[_currentIndex].url.endsWith(".wav") ||
-        widget.medias[_currentIndex].type == MediaType.audio) {
+      content = _videoController!.value.isInitialized
+          ? WebVideoPlayer(
+              videoController: _videoController!,
+              url: widget.medias[_currentIndex].url!,
+              mediaId: widget.medias[_currentIndex].id,
+            )
+          : Placeholder(fallbackHeight: height, fallbackWidth: width);
+    } else if (widget.medias[_currentIndex].isAudio) {
       width = MediaQuery.sizeOf(context).width < 650
           ? MediaQuery.sizeOf(context).width
           : MediaQuery.sizeOf(context).width * 0.85;
@@ -71,7 +74,7 @@ class _GalleryState extends State<Gallery> {
         child: SizedBox(
           height: 400,
           child: AudioPlayerWidget(
-            url: widget.medias[_currentIndex].url,
+            url: widget.medias[_currentIndex].url!,
             mediaId: widget.medias[_currentIndex].id,
             thumbnailUrl: widget.medias[_currentIndex].thumbnailUrl,
           ),
@@ -85,14 +88,21 @@ class _GalleryState extends State<Gallery> {
       height = MediaQuery.sizeOf(context).height - 50;
       width = MediaQuery.sizeOf(context).width - 50;
       content = InteractiveViewer(
-        child: CachedNetworkImage(
-          placeholder: (_, s) => const Placeholder(),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-          imageUrl:
-              widget.medias[_currentIndex].url.replaceFirst('small', 'large'),
-          height: height,
-          fit: BoxFit.contain,
-        ),
+        child: isNotEmpty(widget.medias[_currentIndex].url)
+            ? CachedNetworkImage(
+                imageUrl: widget.medias[_currentIndex].url!,
+                height: height,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              )
+            : isNotEmpty(widget.medias[_currentIndex].path)
+                ? Image.asset(
+                    widget.medias[_currentIndex].path!,
+                    height: height,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  )
+                : Container(),
       );
     }
     var child = Material(
@@ -104,85 +114,28 @@ class _GalleryState extends State<Gallery> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: content,
           ),
-          Positioned.fill(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Visibility(
-                    visible: _currentIndex > 0,
-                    child: InkWell(
-                      onTap: () async {
-                        if (widget.medias[_currentIndex - 1].url
-                                .endsWith(".mp4") ||
-                            widget.medias[_currentIndex - 1].url
-                                .endsWith(".MOV") ||
-                            widget.medias[_currentIndex - 1].type ==
-                                MediaType.video) {
-                          final uri =
-                              Uri.parse(widget.medias[_currentIndex - 1].url);
-                          _videoController =
-                              VideoPlayerController.networkUrl(uri);
-                          await _videoController?.initialize();
-                        }
-                        setState(() {
-                          _currentIndex--;
-                        });
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: widget.arrowBgColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.chevron_left,
-                          color: widget.arrowColor,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: _currentIndex < widget.medias.length - 1,
-                    child: InkWell(
-                      onTap: () async {
-                        if (widget.medias[_currentIndex + 1].url
-                                .endsWith(".mp4") ||
-                            widget.medias[_currentIndex + 1].url
-                                .endsWith(".MOV") ||
-                            widget.medias[_currentIndex + 1].type ==
-                                MediaType.video) {
-                          final uri =
-                              Uri.parse(widget.medias[_currentIndex + 1].url);
-                          _videoController =
-                              VideoPlayerController.networkUrl(uri);
-                          await _videoController?.initialize();
-                        }
-                        setState(() {
-                          _currentIndex++;
-                        });
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: widget.arrowBgColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: widget.arrowColor,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          ArrowsBar(
+            index: _currentIndex,
+            length: widget.medias.length,
+            arrowColor: widget.arrowColor,
+            arrowBgColor: widget.arrowBgColor,
+            onArrowTap: (index) async {
+              if (widget.medias[index].isVideo) {
+                if (isNotEmpty(widget.medias[index].url)) {
+                  _videoController = VideoPlayerController.networkUrl(
+                      Uri.parse(widget.medias[index].url!));
+                } else if (isNotEmpty(widget.medias[index].path)) {
+                  _videoController =
+                      VideoPlayerController.asset(widget.medias[index].path!);
+                }
+                _videoController?.initialize().then((_) {
+                  setState(() {});
+                });
+              }
+              setState(() {
+                _currentIndex = index;
+              });
+            },
           ),
         ],
       ),

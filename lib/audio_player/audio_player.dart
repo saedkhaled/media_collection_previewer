@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:audio_session/audio_session.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -9,24 +10,30 @@ import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+
 import 'utils.dart';
 
 part 'control_buttons.dart';
+
 part 'position_data.dart';
+
 part 'seek_bar.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  final String url;
+  final String? url;
+  final String? path;
   final String? thumbnailUrl;
   final int mediaId;
   final bool autoPlay;
 
-  const AudioPlayerWidget(
-      {super.key,
-      required this.url,
-      this.thumbnailUrl = "",
-      required this.mediaId,
-      this.autoPlay = false});
+  const AudioPlayerWidget({
+    super.key,
+    this.url,
+    this.path,
+    this.thumbnailUrl = "",
+    required this.mediaId,
+    this.autoPlay = false,
+  });
 
   @override
   createState() => _AudioPlayerWidgetState();
@@ -59,7 +66,11 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
     // Try to load audio from a source and catch any errors.
     try {
       // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(widget.url)));
+      if (isNotEmpty(widget.url)) {
+        await _player.setAudioSource(AudioSource.uri(Uri.parse(widget.url!)));
+      } else if (isNotEmpty(widget.path)) {
+        await _player.setAudioSource(AudioSource.asset(widget.path!));
+      }
     } catch (e) {
       if (kDebugMode) {
         print("Error loading audio source: $e");

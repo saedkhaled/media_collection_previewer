@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:media_collection_previewer/enums.dart';
-import 'package:video_player/video_player.dart';
-
+import 'package:media_collection_previewer/widgets/audio_thumbnail.dart';
+import 'package:media_collection_previewer/widgets/video_thumbnail.dart';
+import 'audio_player/utils.dart';
 import 'consts.dart';
 import 'gallery.dart';
 import 'models/models.dart';
+import 'widgets/more_media.dart';
 
 /// A widget that displays a collection of media.
 class MediaCollection extends StatelessWidget {
@@ -101,73 +102,45 @@ class MediaCollection extends StatelessWidget {
   Widget _buildMedia(
       Media media, int index, double height, BuildContext context, int count,
       {bool isLast = false}) {
-    var child = (media.url.endsWith(".mp4") ||
-            media.url.endsWith(".MOV") ||
-            media.type == MediaType.video)
-        ? Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: CachedNetworkImage(
-                  imageUrl: media.thumbnailUrl,
-                  height: height,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: ClipOval(
-                    child: ShaderMask(
-                      shaderCallback: (rect) => LinearGradient(
-                          colors: [playIconBgColor.withOpacity(0.9)],
-                          stops: const [0.0]).createShader(rect),
-                      blendMode: BlendMode.srcOut,
-                      child: Container(
-                        padding: EdgeInsets.all((playIconBgSize - playIconSize) / 2),
-                        child: Icon(
-                          Icons.play_arrow,
-                          size: playIconSize,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+    if (!isNotEmpty(medias[index].url) && !isNotEmpty(medias[index].path)) {
+      throw Exception('Media url or path must be provided');
+    }
+    var child = media.isVideo
+        ? VideoThumbnail(
+            height: height,
+            thumbnailUrl: media.thumbnailUrl,
+            path: media.path,
+            iconBgColor: playIconBgColor,
+            iconBgSize: playIconBgSize,
+            iconSize: playIconSize,
           )
-        : (media.url.endsWith(".mp3") ||
-                media.url.endsWith(".wav") ||
-                media.type == MediaType.audio)
-            ? Container(
+        : media.isAudio
+            ? AudioThumbnail(
                 height: height,
-                decoration: BoxDecoration(
-                  color: audioPlayerBgColor,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Center(
-                  child: Container(
-                    height: audioIconBgSize,
-                    width: audioIconBgSize,
-                    decoration: BoxDecoration(
-                        color: audioIconBgColor, shape: BoxShape.circle),
-                    child: Icon(
-                      Icons.music_note,
-                      color: audioIconColor,
-                      size: audioIconSize,
-                    ),
-                  ),
-                ),
+                thumbnailUrl: media.thumbnailUrl,
+                bgColor: audioPlayerBgColor,
+                iconColor: audioIconColor,
+                iconSize: audioIconSize,
+                iconBgColor: audioIconBgColor,
+                iconBgSize: audioIconBgSize,
               )
             : ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: CachedNetworkImage(
-                  imageUrl: media.url,
-                  height: height,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: isNotEmpty(media.url)
+                    ? CachedNetworkImage(
+                        imageUrl: media.url!,
+                        height: height,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    : isNotEmpty(media.path)
+                        ? Image.asset(
+                            media.path!,
+                            height: height,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(),
               );
     return Padding(
       padding: const EdgeInsets.all(2.5),
@@ -177,36 +150,9 @@ class MediaCollection extends StatelessWidget {
               child: Stack(
                 children: [
                   child,
-                  Container(
+                  MoreMedia(
                     height: height,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    alignment: Alignment.center,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: '+',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 60,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '${count - 5}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 60,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    count: count,
                   ),
                 ],
               ),
@@ -219,13 +165,8 @@ class MediaCollection extends StatelessWidget {
   }
 
   _showGallery(BuildContext context, int index, List<Media> medias) async {
-    VideoPlayerController? videoController;
-    if (medias[index].url.endsWith(".mp4") ||
-        medias[index].url.endsWith(".MOV") ||
-        medias[index].type == MediaType.video) {
-      Uri uri = Uri.parse(medias[index].url);
-      videoController = VideoPlayerController.networkUrl(uri);
-      await videoController.initialize();
+    if (!isNotEmpty(medias[index].url) && !isNotEmpty(medias[index].path)) {
+      throw Exception('Media url or path must be provided');
     }
     if (context.mounted) {
       showDialog(
@@ -234,12 +175,10 @@ class MediaCollection extends StatelessWidget {
         builder: (BuildContext context) => Gallery(
           index: index,
           medias: medias,
-          videoController: videoController,
           arrowColor: arrowColor,
           arrowBgColor: arrowBgColor,
         ),
       );
     }
   }
-
 }
