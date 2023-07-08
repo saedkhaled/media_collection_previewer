@@ -35,7 +35,8 @@ class _GalleryState extends State<Gallery> {
     _currentIndex = widget.index;
     if (widget.medias[_currentIndex].isVideo) {
       _videoController = isNotEmpty(widget.medias[_currentIndex].url)
-          ? VideoPlayerController.networkUrl(Uri.parse(widget.medias[_currentIndex].url!))
+          ? VideoPlayerController.networkUrl(
+              Uri.parse(widget.medias[_currentIndex].url!))
           : VideoPlayerController.asset(widget.medias[_currentIndex].path!);
     }
     _videoController?.initialize().then((_) {
@@ -60,12 +61,21 @@ class _GalleryState extends State<Gallery> {
           ? MediaQuery.sizeOf(context).width
           : _videoController!.value.size.width / 1.7;
       content = _videoController!.value.isInitialized
-          ? WebVideoPlayer(
-              videoController: _videoController!,
-              url: widget.medias[_currentIndex].url!,
-              mediaId: widget.medias[_currentIndex].id,
-            )
-          : Placeholder(fallbackHeight: height, fallbackWidth: width);
+          ? Center(
+            child: SizedBox(
+                height: height,
+                width: width,
+                child: ColoredBox(
+                  color: Colors.black,
+                  child: WebVideoPlayer(
+                    videoController: _videoController!,
+                    url: widget.medias[_currentIndex].url!,
+                    autoPlay: true,
+                  ),
+                ),
+              ),
+          )
+          : Container();
     } else if (widget.medias[_currentIndex].isAudio) {
       width = MediaQuery.sizeOf(context).width < 650
           ? MediaQuery.sizeOf(context).width
@@ -145,11 +155,7 @@ class _GalleryState extends State<Gallery> {
       child: Stack(
         children: [
           Center(
-            child: SizedBox(
-              height: height,
-              width: width,
-              child: child,
-            ),
+            child: child,
           ),
           Positioned(
             top: 20,
