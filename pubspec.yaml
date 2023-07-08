@@ -1,8 +1,7 @@
 name: media_collection_previewer
 description: A media collection previewer widget.
-version: 0.0.1
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-homepage: ''
+version: 0.0.1-dev.1
+homepage: 'https://github.com/saedkhaled/media_collection_previewer'
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -13,10 +12,7 @@ dependencies:
     sdk: flutter
   equatable: ^2.0.5
   cached_network_image: ^3.2.3
-  web_video_player:
-    git:
-      url: https://github.com/saedkhaled/web_video_player.git
-      ref: main
+  web_video_player: 0.0.1-dev.1
   video_player: ^2.7.0
   collection: ^1.17.1
   just_audio: ^0.9.34
