@@ -4,7 +4,7 @@ class _SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
   final Duration bufferedPosition;
-  final ValueChanged<Duration>? onChanged;
+  // final ValueChanged<Duration>? onChanged;
   final ValueChanged<Duration>? onChangeEnd;
 
   const _SeekBar({
@@ -12,7 +12,7 @@ class _SeekBar extends StatefulWidget {
     required this.duration,
     required this.position,
     required this.bufferedPosition,
-    this.onChanged,
+    // this.onChanged,
     this.onChangeEnd,
   }) : super(key: key);
 
@@ -90,10 +90,10 @@ class _SeekBarState extends State<_SeekBar> {
                       setState(() {
                         _dragValue = value;
                       });
-                      if (widget.onChanged != null) {
-                        widget
-                            .onChanged!(Duration(milliseconds: value.round()));
-                      }
+                      // if (widget.onChanged != null) {
+                      //   widget
+                      //       .onChanged!(Duration(milliseconds: value.round()));
+                      // }
                     },
                     onChangeEnd: (value) {
                       if (widget.onChangeEnd != null) {
