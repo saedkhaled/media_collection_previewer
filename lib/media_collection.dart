@@ -7,6 +7,7 @@ import 'audio_player/utils.dart';
 import 'consts.dart';
 import 'gallery.dart';
 import 'models/models.dart';
+import 'models/theme.dart';
 import 'widgets/more_media.dart';
 
 /// A widget that displays a collection of media.
@@ -14,49 +15,13 @@ class MediaCollection extends StatelessWidget {
   /// The list of media to display.
   final List<Media> medias;
 
-  /// The color of the arrow icon.
-  final Color arrowColor;
-
-  /// The color of the arrow icon background.
-  final Color arrowBgColor;
-
-  /// The color of the play icon background.
-  final Color playIconBgColor;
-
-  /// The color of the audio icon background.
-  final Color audioIconBgColor;
-
-  /// The color of the audio icon.
-  final Color audioIconColor;
-
-  /// The color of the audio player background.
-  final Color audioPlayerBgColor;
-
-  /// The size of the play icon.
-  final double playIconSize;
-
-  /// The size of the audio icon.
-  final double audioIconSize;
-
-  /// The size of the play icon background.
-  final double playIconBgSize;
-
-  /// The size of the audio icon background.
-  final double audioIconBgSize;
+  /// The theme of the media collection widget.
+  final MediaCollectionTheme theme;
 
   const MediaCollection({
     Key? key,
     required this.medias,
-    this.arrowColor = defaultIconColor,
-    this.arrowBgColor = defaultIconBgColor,
-    this.playIconBgColor = defaultIconColor,
-    this.audioIconBgColor = defaultIconColor,
-    this.audioIconColor = defaultIconBgColor,
-    this.audioPlayerBgColor = defaultIconBgColor,
-    this.playIconSize = defaultIconSize,
-    this.audioIconSize = defaultIconSize,
-    this.playIconBgSize = defaultIconBgSize,
-    this.audioIconBgSize = defaultIconBgSize,
+    this.theme = defaultMediaCollectionTheme,
   }) : super(key: key);
 
   @override
@@ -66,8 +31,8 @@ class MediaCollection extends StatelessWidget {
       child: medias.length <= 2
           ? Column(
               children: medias
-                  .mapIndexed((index, media) =>
-                      _buildMedia(media, index, 300, context, medias.length))
+                  .mapIndexed(
+                      (index, media) => _buildMedia(media, index, context))
                   .toList(),
             )
           : Row(
@@ -78,8 +43,8 @@ class MediaCollection extends StatelessWidget {
                   child: Column(
                     children: medias
                         .sublist(0, 2)
-                        .mapIndexed((index, media) => _buildMedia(
-                            media, index, 300, context, medias.length))
+                        .mapIndexed((index, media) =>
+                            _buildMedia(media, index, context))
                         .toList(),
                   ),
                 ),
@@ -89,7 +54,7 @@ class MediaCollection extends StatelessWidget {
                     children: medias
                         .sublist(2, medias.length > 5 ? 5 : medias.length)
                         .mapIndexed((index, media) => _buildMedia(
-                            media, index + 2, 198.25, context, medias.length,
+                            media, index + 2, context,
                             isLast: index == 2 && medias.length > 5))
                         .toList(),
                   ),
@@ -99,44 +64,43 @@ class MediaCollection extends StatelessWidget {
     );
   }
 
-  Widget _buildMedia(
-      Media media, int index, double height, BuildContext context, int count,
+  Widget _buildMedia(Media media, int index, BuildContext context,
       {bool isLast = false}) {
-    if (!isNotEmpty(medias[index].url) && !isNotEmpty(medias[index].path)) {
+    if (!isNotEmpty(media.url) && !isNotEmpty(media.path)) {
       throw Exception('Media url or path must be provided');
     }
+    final isSubItem = index > 1;
     var child = media.isVideo
         ? VideoThumbnail(
-            height: height,
+            theme: theme,
             thumbnailUrl: media.thumbnailUrl,
             path: media.path,
-            iconBgColor: playIconBgColor,
-            iconBgSize: playIconBgSize,
-            iconSize: playIconSize,
+            url: media.url,
+            isSub: isSubItem,
           )
         : media.isAudio
             ? AudioThumbnail(
-                height: height,
                 thumbnailUrl: media.thumbnailUrl,
-                bgColor: audioPlayerBgColor,
-                iconColor: audioIconColor,
-                iconSize: audioIconSize,
-                iconBgColor: audioIconBgColor,
-                iconBgSize: audioIconBgSize,
+                theme: theme,
+                isSub: isSubItem,
               )
             : ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: isNotEmpty(media.url)
                     ? CachedNetworkImage(
                         imageUrl: media.url!,
-                        height: height,
+                        height: isSubItem
+                            ? theme.subItemHeight
+                            : theme.mainItemHeight,
                         width: double.infinity,
                         fit: BoxFit.cover,
                       )
                     : isNotEmpty(media.path)
                         ? Image.asset(
                             media.path!,
-                            height: height,
+                            height: isSubItem
+                                ? theme.subItemHeight
+                                : theme.mainItemHeight,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           )
@@ -151,8 +115,9 @@ class MediaCollection extends StatelessWidget {
                 children: [
                   child,
                   MoreMedia(
-                    height: height,
-                    count: count,
+                    height:
+                        isSubItem ? theme.subItemHeight : theme.mainItemHeight,
+                    count: medias.length,
                   ),
                 ],
               ),
@@ -175,8 +140,7 @@ class MediaCollection extends StatelessWidget {
         builder: (BuildContext context) => Gallery(
           index: index,
           medias: medias,
-          arrowColor: arrowColor,
-          arrowBgColor: arrowBgColor,
+          theme: theme,
         ),
       );
     }

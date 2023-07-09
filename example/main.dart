@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/media_collection_previewer.dart';
+import 'package:media_collection_previewer/models/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,18 +54,22 @@ class MyHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MediaCollection(
-              medias: medias,
-              arrowColor: Colors.white,
-              arrowBgColor: Colors.black,
-              playIconBgColor: Colors.black,
-              playIconBgSize: 50,
-              playIconSize: 30,
-              audioIconBgColor: Colors.black,
-              audioIconBgSize: 50,
-              audioIconColor: Colors.white,
-              audioIconSize: 30,
-              audioPlayerBgColor: Colors.black,
-            ),
+                medias: medias,
+                theme: const MediaCollectionTheme(
+                  arrowColor: Colors.white,
+                  arrowBgColor: Colors.black,
+                  playIconBgColor: Colors.black,
+                  playIconBgSize: 50,
+                  playIconSize: 30,
+                  audioIconBgColor: Colors.black,
+                  audioIconBgSize: 50,
+                  audioIconColor: Colors.white,
+                  audioIconSize: 30,
+                  audioPlayerBgColor: Colors.black,
+                  dividerWidth: 2.5,
+                  mainItemHeight: 300,
+                  subItemHeight: 198.25,
+                )),
           ],
         ),
       ),

@@ -1,53 +1,45 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/audio_player/utils.dart';
-import 'package:media_collection_previewer/consts.dart';
+import 'package:media_collection_previewer/models/theme.dart';
 
 class AudioThumbnail extends StatelessWidget {
-  final double height;
   final String? thumbnailUrl;
-  final Color bgColor;
-  final Color iconColor;
-  final Color iconBgColor;
-  final double iconBgSize;
-  final double iconSize;
+  final MediaCollectionTheme theme;
+  final bool isSub;
 
   const AudioThumbnail({
     super.key,
-    required this.height,
+    required this.theme,
     this.thumbnailUrl,
-    this.bgColor = defaultIconBgColor,
-    this.iconColor = defaultIconBgColor,
-    this.iconSize = defaultIconSize,
-    this.iconBgColor = defaultIconColor,
-    this.iconBgSize = defaultIconBgSize,
+    this.isSub = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: isSub ? theme.subItemHeight : theme.mainItemHeight,
       decoration: BoxDecoration(
-        color: bgColor,
+        color: theme.audioPlayerBgColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Center(
         child: isNotEmpty(thumbnailUrl)
             ? CachedNetworkImage(
                 imageUrl: thumbnailUrl!,
-                height: height,
+                height: isSub ? theme.subItemHeight : theme.mainItemHeight,
                 width: double.infinity,
                 fit: BoxFit.cover,
               )
             : Container(
-                height: iconBgSize,
-                width: iconBgSize,
-                decoration:
-                    BoxDecoration(color: iconBgColor, shape: BoxShape.circle),
+                height: theme.audioIconBgSize,
+                width: theme.audioIconBgSize,
+                decoration: BoxDecoration(
+                    color: theme.audioIconBgColor, shape: BoxShape.circle),
                 child: Icon(
                   Icons.music_note,
-                  color: iconColor,
-                  size: iconSize,
+                  color: theme.audioIconColor,
+                  size: theme.audioIconSize,
                 ),
               ),
       ),
