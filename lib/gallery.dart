@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/audio_player/utils.dart';
-import 'package:media_collection_previewer/models/theme.dart';
 import 'package:video_player/video_player.dart';
 import 'package:web_video_player/player.dart';
 
