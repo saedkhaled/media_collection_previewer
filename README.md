@@ -10,6 +10,9 @@ thereby enhancing the user experience and the overall quality of your applicatio
 <img src="screenshots/video.png" width="350" alt="video player"/>
 <img src="screenshots/audio.png" width="350", alt="audio player"/>
 
+
+Note: This package is still under development and is subject to change.
+
 ## Features
 
 - Supports multiple file formats: Effortlessly preview image, video, and audio files all in one place.
