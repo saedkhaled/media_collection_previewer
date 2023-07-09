@@ -9,5 +9,7 @@ const defaultVideoBgColor = Colors.black;
 const defaultMainItemHeight = 300.0;
 const defaultSubItemHeight = 198.25;
 const defaultDividerWidth = 2.5;
+const defaultMainItemFlex = 2;
+const defaultSubItemFlex = 1;
 
 const defaultMediaCollectionTheme = MediaCollectionTheme();

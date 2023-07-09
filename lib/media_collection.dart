@@ -7,7 +7,6 @@ import 'audio_player/utils.dart';
 import 'consts.dart';
 import 'gallery.dart';
 import 'models/models.dart';
-import 'models/theme.dart';
 import 'widgets/more_media.dart';
 
 /// A widget that displays a collection of media.
@@ -39,7 +38,7 @@ class MediaCollection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: theme.mainItemFlex,
                   child: Column(
                     children: medias
                         .sublist(0, 2)
@@ -49,7 +48,7 @@ class MediaCollection extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: theme.subItemFlex,
                   child: Column(
                     children: medias
                         .sublist(2, medias.length > 5 ? 5 : medias.length)

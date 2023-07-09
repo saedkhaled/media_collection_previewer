@@ -50,6 +50,12 @@ class MediaCollectionTheme {
   /// The width of the divider between the media items.
   final double dividerWidth;
 
+  /// The flex percentage of the main item in the grid view.
+  final int mainItemFlex;
+
+  /// The flex percentage of the sub item in the grid view.
+  final int subItemFlex;
+
   /// The constructor for the media collection theme (default values are provided).
   const MediaCollectionTheme({
     this.arrowColor = defaultIconColor,
@@ -68,5 +74,7 @@ class MediaCollectionTheme {
     this.subItemHeight = defaultSubItemHeight,
     this.dividerWidth = defaultDividerWidth,
     this.videoBgColor = defaultVideoBgColor,
+    this.mainItemFlex = defaultMainItemFlex,
+    this.subItemFlex = defaultSubItemFlex,
   });
 }
