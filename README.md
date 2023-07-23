@@ -5,10 +5,10 @@ This package enables developers to open and interact with a comprehensive viewer
 them,
 thereby enhancing the user experience and the overall quality of your application.
 
-<img src="screenshots/main.png" width="700" alt="widget"/>
-<img src="screenshots/image.png" width="350" alt="image preview"/>
-<img src="screenshots/video.png" width="350" alt="video player"/>
-<img src="screenshots/audio.png" width="350", alt="audio player"/>
+<img src="https://github.com/saedkhaled/media_collection_previewer/blob/main/screenshots/main.png?raw=true" width="700" alt="widget"/>
+<img src="https://github.com/saedkhaled/media_collection_previewer/blob/main/screenshots/image.png?raw=true" width="350" alt="image preview"/>
+<img src="https://github.com/saedkhaled/media_collection_previewer/blob/main/screenshots/video.png?raw=true" width="350" alt="video player"/>
+<img src="https://github.com/saedkhaled/media_collection_previewer/blob/main/screenshots/audio.png?raw=true" width="350", alt="audio player"/>
 
 Note: This package is still under development and is subject to change.
 

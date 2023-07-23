@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:media_collection_previewer/media_collection_previewer.dart';
-import 'package:media_collection_previewer/models/theme.dart';
 
 void main() {
   runApp(const MyApp());
