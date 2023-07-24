@@ -1,3 +1,8 @@
+## 0.0.1-dev.3
+
+* Fix bugs in design
+* Fix readme file, and add preview.
+
 ## 0.0.1-dev.2
 
 * Organize project structure
