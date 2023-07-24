@@ -120,10 +120,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
         Center(
           child: CachedNetworkImage(
             imageUrl: widget.thumbnailUrl ?? '',
-            errorWidget: (ctx, url, error) => Image.asset(
-              'assets/images/music.png',
+            errorWidget: (ctx, url, error) => const Icon(
+              Icons.music_note,
               color: Colors.black45,
-              width: 70,
+              size: 70,
             ),
           ),
         ),
