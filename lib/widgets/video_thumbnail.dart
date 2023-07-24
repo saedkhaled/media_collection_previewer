@@ -63,10 +63,10 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
                 borderRadius: BorderRadius.circular(5),
                 child: isNotEmpty(widget.thumbnailUrl)
                     ? CachedNetworkImage(
-                        imageUrl: widget.thumbnailUrl!,
                         height: height,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        imageUrl: widget.thumbnailUrl!,
                       )
                     : Container(
                         height: height,
@@ -78,23 +78,19 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
               SizedBox(
                 height: height,
                 child: Center(
-                  child: ClipOval(
-                    child: ShaderMask(
-                      shaderCallback: (rect) => LinearGradient(colors: [
-                        widget.theme.playIconBgColor.withOpacity(0.9)
-                      ], stops: const [
-                        0.0
-                      ]).createShader(rect),
-                      blendMode: BlendMode.srcOut,
-                      child: Container(
-                        padding: EdgeInsets.all((widget.theme.playIconBgSize -
-                                widget.theme.playIconSize) /
-                            2),
-                        child: Icon(
-                          Icons.play_arrow,
-                          size: widget.theme.playIconSize,
-                        ),
-                      ),
+                  child: Container(
+                    height: widget.theme.playIconBgSize,
+                    width: widget.theme.playIconBgSize,
+                    decoration: BoxDecoration(
+                      color: widget.theme.videoBgColor
+                          .withOpacity(widget.theme.playIconColor.opacity),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.play_arrow,
+                      size: widget.theme.playIconSize,
+                      color: widget.theme.playIconColor
+                          .withOpacity(widget.theme.playIconColor.opacity),
                     ),
                   ),
                 ),

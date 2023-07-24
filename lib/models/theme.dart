@@ -24,6 +24,9 @@ class MediaCollectionTheme {
   /// The size of the play icon.
   final double playIconSize;
 
+  /// The color of the play icon.
+  final Color playIconColor;
+
   /// The size of the audio icon.
   final double audioIconSize;
 
@@ -56,11 +59,14 @@ class MediaCollectionTheme {
   /// The flex percentage of the sub item in the grid view.
   final int subItemFlex;
 
+  final double playIconOpacity;
+
   /// The constructor for the media collection theme (default values are provided).
   const MediaCollectionTheme({
     this.arrowColor = defaultIconColor,
     this.arrowBgColor = defaultIconBgColor,
     this.playIconBgColor = defaultIconColor,
+    this.playIconColor = defaultIconBgColor,
     this.audioIconBgColor = defaultIconColor,
     this.audioIconColor = defaultIconBgColor,
     this.audioPlayerBgColor = defaultIconBgColor,
@@ -76,5 +82,6 @@ class MediaCollectionTheme {
     this.videoBgColor = defaultVideoBgColor,
     this.mainItemFlex = defaultMainItemFlex,
     this.subItemFlex = defaultSubItemFlex,
+    this.playIconOpacity = defaultPlayIconOpacity,
   });
 }
