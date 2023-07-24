@@ -68,7 +68,7 @@ This will create a previewer which shows your media files and allows them to be 
 
 ## Additional information
 
-You can check out the [example]('https://github.com/saedkhaled/media_collection_previewer/tree/main/example') directory
+You can check out the [example]('https://github.com/saedkhaled/media_collection_previewer/tree/main/example/main.dart') directory
 for a sample application using this package.
 
 ## License
